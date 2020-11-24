@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
           child: ListView.builder(
             itemCount: 2,
             itemBuilder: (BuildContext ctxt, int index){
-              return Quotes();
+              return Quotes(index);
             },
             )
         ),
@@ -45,8 +46,13 @@ class MyApp extends StatelessWidget {
 
 //creat a widget as a method give it paramater (color, quotes , author , date)
 
-class Quotes extends StatelessWidget {
+class Quotes extends StatelessWidget{
+   List<String> date = ['Today', 'Yesterday'];
+   List<int> clr = [0xff595DB2, 0xff353544];
+    int i;
+    Quotes(this.i);
   Widget build(BuildContext context){
+   
     return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -54,16 +60,20 @@ class Quotes extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(bottom: 10.0, top: 10.0, left: 5.0),
                   child :
-                  Text("Today's Quote", style: TextStyle(fontFamily: 'AbeeZee', fontSize: 25),),
+                  Text("${date[i]}'s Quote", style: TextStyle(fontFamily: 'AbeeZee', fontSize: 25),),
                   ),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.grey,
+                    color : Color(clr[i]),
                     borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                  height : 300.0,
-                  width: 400.0,
+                  height : 350.0,
+                  width: 340.0,
                   )
                 ],
               ); 
   }
+}
+
+class Date{
+
 }
