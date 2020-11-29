@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-
-void main() => runApp(MyApp());
+void main() async
+{
+  await Firebase.initializeApp();
+   runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
+  
   @override
+  
   Widget build(BuildContext context) {
     return MaterialApp(
+      
       title: 'Welcome to Flutter',
       home: Scaffold(
         appBar: AppBar(
@@ -50,6 +58,7 @@ class Quotes extends StatelessWidget{
    List<String> date = ['Today', 'Yesterday'];
    List<int> clr = [0xff595DB2, 0xff353544];
     int i;
+   // var str = ''; 
     Quotes(this.i);
   Widget build(BuildContext context){
    
@@ -68,12 +77,10 @@ class Quotes extends StatelessWidget{
                     borderRadius: BorderRadius.all(Radius.circular(5.0))),
                   height : 350.0,
                   width: 340.0,
+                  child :
+                    Text('hello world'),
                   )
                 ],
               ); 
   }
-}
-
-class Date{
-
 }
