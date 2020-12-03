@@ -1,12 +1,34 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'dart:math';
 
-void main() async
+import 'package:flutter/semantics.dart';
+
+void main() 
 {
-  await Firebase.initializeApp();
-   runApp(MyApp());
+  runApp(MyApp());
 }
+
+class App extends StatelessWidget {
+   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+   @override
+   Widget build(BuildContext context)
+   {
+     return FutureBuilder(
+       future: _initialization,
+       builder: (context, snapshot){
+         if (snapshot.hasError)
+          return Text('something');
+          return MyHomePage();
+       }
+       );
+   }
+}
+
+
+
 
 class MyApp extends StatelessWidget {
   
@@ -16,7 +38,36 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       
       title: 'Welcome to Flutter',
-      home: Scaffold(
+      home: App(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return HomePage();
+  }
+
+}
+
+
+class HomePage extends State<StatefulWidget>{
+
+  int length = 1;
+  
+  void changeQuotesLength(int e) {
+    if (e == 0)
+    setState(() {
+      if (length <= 1)
+       length += 1;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context)
+  {
+  return Scaffold(
         appBar: AppBar(
           title: Text('To-do++', style: TextStyle(color: Colors.black, fontFamily: 'HappyMonkey', fontSize: 25),),
            backgroundColor: Colors.transparent,
@@ -25,18 +76,21 @@ class MyApp extends StatelessWidget {
         body: Container(
           margin: const EdgeInsets.only(left: 16.0),
           child: ListView.builder(
-            itemCount: 2,
+            itemCount: length,
             itemBuilder: (BuildContext ctxt, int index){
-              return Quotes(index);
+              return GettingData(index);
             },
             )
         ),
         bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 0,
+          onTap: (e) => changeQuotesLength(e),
           items: const <BottomNavigationBarItem>
           [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
                 label: 'Home',
+
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.calendar_today),
@@ -47,19 +101,20 @@ class MyApp extends StatelessWidget {
                 label: 'Settings',
               ),
           ],),
-      ),
-    );
-  }
+      );
 }
-
+}
 //creat a widget as a method give it paramater (color, quotes , author , date)
 
 class Quotes extends StatelessWidget{
    List<String> date = ['Today', 'Yesterday'];
    List<int> clr = [0xff595DB2, 0xff353544];
     int i;
+    String quote;
+    String name;
+    int colors;
    // var str = ''; 
-    Quotes(this.i);
+    Quotes({this.colors, this.name, this.quote ,this.i});
   Widget build(BuildContext context){
    
     return Column(
@@ -73,14 +128,61 @@ class Quotes extends StatelessWidget{
                   ),
                 Container(
                   decoration: BoxDecoration(
-                    color : Color(clr[i]),
-                    borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                  height : 350.0,
-                  width: 340.0,
+                    color : Color(colors),
+                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                  height : 300.0,
+                  width: 300.0,
+                  
                   child :
-                    Text('hello world'),
+                  Column(
+                   //c crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(left:30, top: 40, right :50),
+                        child:
+                        Text('$quote', style: TextStyle(fontFamily: 'AbhayaLibreSemiBold', fontSize: 28, color: Colors.white)),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 150, bottom: 20, right: 0),
+                        child:
+                      Text('$name', 
+                        
+                        style: 
+                            TextStyle(fontFamily: 'Inter', fontSize: 15, color: Colors.white)),
+                      ),
+                  ]
+                  ),
                   )
                 ],
               ); 
+  }
+}
+
+class GettingData extends StatelessWidget{
+  static List<String> textQuote;
+  int ind;
+  GettingData(this.ind);
+  var random = new Random();
+  var rand ;
+  Widget build(BuildContext context){
+  //  quote1 = FirebaseDatabase.instance.reference().child('todo-97344');
+   return FutureBuilder(
+    future: FirebaseDatabase.instance.reference().once(),
+    builder :(BuildContext context, AsyncSnapshot snapshot)
+    {
+      if (!snapshot.hasData)
+        return Container(
+          child: 
+            Text('wwait'),
+        );
+      if (snapshot.hasData)
+      {
+        rand = random.nextInt(10);
+        return Quotes(colors:int.parse(snapshot.data.value[rand]['color']), name:snapshot.data.value[rand]['name'] ,quote:snapshot.data.value[rand]['quote'], i:ind);
+      }
+      return Container();
+    },
+    );
   }
 }
