@@ -59,7 +59,7 @@ class HomePage extends State<StatefulWidget>{
   void changeQuotesLength(int e) {
     if (e == 0)
     setState(() {
-      if (length <= 1)
+      if (length < 2)
        length += 1;
     });
   }
@@ -74,10 +74,11 @@ class HomePage extends State<StatefulWidget>{
            elevation: 0,
         ),
         body: Container(
+          
           margin: const EdgeInsets.only(left: 16.0),
           child: ListView.builder(
             itemCount: length,
-            itemBuilder: (BuildContext ctxt, int index){
+            itemBuilder: (BuildContext context, int index){
               return GettingData(index);
             },
             )
@@ -90,7 +91,6 @@ class HomePage extends State<StatefulWidget>{
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
                 label: 'Home',
-
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.calendar_today),
@@ -113,7 +113,6 @@ class Quotes extends StatelessWidget{
     String quote;
     String name;
     int colors;
-   // var str = ''; 
     Quotes({this.colors, this.name, this.quote ,this.i});
   Widget build(BuildContext context){
    
@@ -146,8 +145,7 @@ class Quotes extends StatelessWidget{
                       Container(
                         padding: const EdgeInsets.only(left: 150, bottom: 20, right: 0),
                         child:
-                      Text('$name', 
-                        
+                      Text('$name',
                         style: 
                             TextStyle(fontFamily: 'Inter', fontSize: 15, color: Colors.white)),
                       ),
@@ -158,28 +156,47 @@ class Quotes extends StatelessWidget{
               ); 
   }
 }
-
+// Future <dynamic> getData() async{
+  var data =  FirebaseDatabase.instance.reference().once();
+  // return (data);
+// } 
 class GettingData extends StatelessWidget{
   static List<String> textQuote;
   int ind;
+  static int temp;
+ // static bool flag ;
+ // flag = false;
   GettingData(this.ind);
   var random = new Random();
-  var rand ;
+  static var rand;
+  static var flag = 0;
+  static int flag1 = 0;
   Widget build(BuildContext context){
-  //  quote1 = FirebaseDatabase.instance.reference().child('todo-97344');
    return FutureBuilder(
-    future: FirebaseDatabase.instance.reference().once(),
+    future: data,
     builder :(BuildContext context, AsyncSnapshot snapshot)
     {
       if (!snapshot.hasData)
-        return Container(
-          child: 
-            Text('wwait'),
-        );
+        return Container();
       if (snapshot.hasData)
       {
-        rand = random.nextInt(10);
-        return Quotes(colors:int.parse(snapshot.data.value[rand]['color']), name:snapshot.data.value[rand]['name'] ,quote:snapshot.data.value[rand]['quote'], i:ind);
+        if (ind == 0 && flag == 0)
+        {
+          flag = 1;
+          rand = random.nextInt(13);
+          temp = rand;
+        }
+        if (ind == 0)
+        {   if (flag1 == 4)
+             temp = rand;
+            if (flag == 2)
+              rand = random.nextInt(13);      
+            flag = 2;
+            return Quotes(colors:int.parse(snapshot.data.value[rand]['color']), name:snapshot.data.value[rand]['name'] ,quote:snapshot.data.value[rand]['quote'], i:ind);
+        } else { 
+          flag1 = 4;
+          return Quotes(colors:int.parse(snapshot.data.value[temp]['color']), name:snapshot.data.value[temp]['name'] ,quote:snapshot.data.value[temp]['quote'], i:ind);
+        }
       }
       return Container();
     },
