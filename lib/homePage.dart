@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'dart:math';
 import 'calendar.dart';
+import 'homeBody.dart';
 
 class App extends StatelessWidget {
    final Future<FirebaseApp> _initialization = Firebase.initializeApp();
@@ -49,6 +50,14 @@ class HomePage extends State<StatefulWidget>{
   //DateTime.now().minute.toString();
 // var hour = DateTime.now().hour.toString();
   
+  Widget ChangeBody()
+  {
+    if (e == 1)
+      return Calendar();
+    if (e == 0)
+     return HomeBody();
+    return Container(child:Text("hello"),);
+  }
 
   void changeQuotesLength(int e) {
    // print(hour);
@@ -56,12 +65,10 @@ class HomePage extends State<StatefulWidget>{
     if (e == 0)
     setState(() {
       length = 1;
-      if (length <=  2)
+      if (length <= 2)
         length++;  
     },
     );
-    else if (e == 1)
-      Calendar();
   }
 
   @override
@@ -73,15 +80,7 @@ class HomePage extends State<StatefulWidget>{
            backgroundColor: Colors.transparent,
            elevation: 0,
         ),
-        body: Container(
-          margin: const EdgeInsets.only(left: 16.0),
-          child: ListView.builder(
-            itemCount: 2,
-            itemBuilder: (BuildContext context, int index){
-              return GettingData(index);
-            },
-            )
-        ),
+        body: ChangeBody(),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: 0,
           onTap: (e) => changeQuotesLength(e),

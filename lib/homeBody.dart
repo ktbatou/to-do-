@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'homePage.dart';
 import 'package:flutter/material.dart';
 
-class HomeBody extends State<StatefulWidget>{
+class HomeBody extends StatefulWidget{
   @override
+  HomeBody createState() => HomeBody();
   Widget build(BuildContext context)
   {
     return Container(
