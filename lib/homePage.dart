@@ -53,9 +53,9 @@ class HomePage extends State<StatefulWidget>{
   Widget ChangeBody()
   {
     if (e == 1)
-      return Calendar();
+      return CalendarState();
     if (e == 0)
-     return HomeBody();
+     return BodyState();
     return Container(child:Text("hello"),);
   }
 
