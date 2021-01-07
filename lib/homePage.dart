@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'dart:math';
 import 'calendar.dart';
 import 'homeBody.dart';
+import 'Settings.dart';
 
 class App extends StatelessWidget {
    final Future<FirebaseApp> _initialization = Firebase.initializeApp();
@@ -14,8 +15,8 @@ class App extends StatelessWidget {
      return FutureBuilder(
        future: _initialization,
        builder: (context, snapshot){
-         if (snapshot.hasError)
-          return Text('something');
+       //  if (snapshot.hasError)
+         // return Text('something');
           return MyHomePage();
        }
        );
@@ -25,7 +26,6 @@ class App extends StatelessWidget {
 class MyApp extends StatelessWidget {
   
   @override
-  
   Widget build(BuildContext context) {
     return MaterialApp(
       
@@ -49,17 +49,23 @@ class HomePage extends State<StatefulWidget>{
   int length = 1;
   //DateTime.now().minute.toString();
 // var hour = DateTime.now().hour.toString();
-  
-  Widget ChangeBody()
+  int ev = 0;
+  Widget ChangeBody(int ev)
   {
-    if (e == 1)
+    if (ev == 1)
       return CalendarState();
-    if (e == 0)
+    else if (ev == 0)
      return BodyState();
+    else if (ev == 2)
+      return SettingState();
     return Container(child:Text("hello"),);
   }
 
   void changeQuotesLength(int e) {
+    setState(() {
+      ev = e;
+    });
+    
    // print(hour);
      // print(minute);DateTime.now().hour.toString()== "19" && DateTime.now().minute.toString() == "2"
     if (e == 0)
@@ -80,9 +86,9 @@ class HomePage extends State<StatefulWidget>{
            backgroundColor: Colors.transparent,
            elevation: 0,
         ),
-        body: ChangeBody(),
+        body: ChangeBody(ev),
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 0,
+          currentIndex: ev,
           onTap: (e) => changeQuotesLength(e),
           items: const <BottomNavigationBarItem>
           [
@@ -121,7 +127,7 @@ class Quotes extends StatelessWidget{
                 Container(
                   margin: const EdgeInsets.only(bottom: 10.0, top: 10.0, left: 5.0),
                   child :
-                  Text("${date[i]}'s Quote", style: TextStyle(fontFamily: 'AbeeZee', fontSize: 25),),
+                  Text("${date[i]}'s Quote", style: TextStyle(fontFamily: 'InteL', fontSize: 25),),
                   ),
                 Container(
                   decoration: BoxDecoration(
@@ -145,7 +151,7 @@ class Quotes extends StatelessWidget{
                         child:
                       Text('$name',
                         style: 
-                            TextStyle(fontFamily: 'Inter', fontSize: 15, color: Colors.white)),
+                            TextStyle(fontFamily: 'Inter', fontSize: 15, color: Colors.white,),),
                       ),
                   ]
                   ),

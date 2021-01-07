@@ -27,6 +27,7 @@ dependencies:
   firebase_database: "^4.3.0"
   cupertino_icons: ^1.0.0
   firebase_core: ^0.5.2+1
+  flutter_calendar_carousel: ^1.5.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -92,3 +93,9 @@ flutter:
       - family: AbeeZee
         fonts:
           - asset: fonts/ABeeZee-Italic.ttf
+      - family: InterM
+        fonts:
+          - asset: fonts/static/Inter-Medium-slnt=0.ttf
+      - family: InterL
+        fonts:
+          - asset: fonts/static/Inter-Light-slnt=0.ttf
