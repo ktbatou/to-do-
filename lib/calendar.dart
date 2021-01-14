@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'homeBody.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
+import 'Settings.dart';
+import 'task.dart';
 
 
 class CalendarState extends StatefulWidget {
@@ -34,10 +36,14 @@ _scrollListener() {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 16.0),
+          margin: EdgeInsets.symmetric(horizontal: 16.0,),
           child: CalendarCarousel(
             onDayPressed: (DateTime date, List events){
                  this.setState(() => _currentDate = date);
+                     Navigator.push(
+                     context,
+                     MaterialPageRoute(builder: (context) => TaskState(_currentDate),),
+                    );
             },
             todayButtonColor: Colors.redAccent,
             weekdayTextStyle: TextStyle(color: Color(0xff777777)),
